@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="ir_cron_get_new_token" model="ir.cron">
+            <field name="name">Auto Manage Fiscal Device Token</field>
+            <field name="model_id" ref="model_fiscal_device"/>
+            <field name="type">ir.actions.server</field>
+            <field name="state">code</field>
+            <field name="code">model._cron_refresh_tokens()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="ir_cron_device_status_check" model="ir.cron">
+            <field name="name">Fiscal Device Status Check</field>
+            <field name="model_id" ref="model_fiscal_device"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_check_device_status()</field>
+            <field name="interval_number">15</field>
+            <field name="interval_type">minutes</field>
+            <field name="active">True</field>
+        </record>
+
+        <!-- Midnight cron to automatically open fiscal day (around 00:00 AM) -->
+        <record id="ir_cron_auto_open_fiscal_day" model="ir.cron">
+            <field name="name">Auto Open Fiscal Day (00:00-00:30 AM)</field>
+            <field name="model_id" ref="model_fiscal_device"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_auto_open_fiscal_day()</field>
+            <field name="interval_number">30</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="active" eval="True"/>
+            <!-- Start at 00:00 AM and run every 30 minutes -->
+            <field name="nextcall" eval="(datetime.now().replace(hour=0, minute=1, second=0) + timedelta(days=(datetime.now().hour >= 0) and 1 or 0)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+        
+        <!-- Night cron to automatically close fiscal day (around midnight) -->
+        <record id="ir_cron_auto_close_fiscal_day" model="ir.cron">
+            <field name="name">Auto Close Fiscal Day (11:30 PM-12:00 AM)</field>
+            <field name="model_id" ref="model_fiscal_device"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_auto_close_fiscal_day()</field>
+            <field name="interval_number">30</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="active" eval="True"/>
+            <!-- Start at 11:30 PM -->
+            <field name="nextcall" eval="(datetime.now().replace(hour=23, minute=30, second=0) + timedelta(days=(datetime.now().hour >= 23 and datetime.now().minute >= 30) and 1 or 0)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- View fiscal.device View Tree -->
+    <record id="view_fiscal_device_tree" model="ir.ui.view">
+        <field name="name">view.fiscal.device.tree</field>
+        <field name="model">fiscal.device</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="device_id"/>
+                <field name="device_serial"/>
+                <field name="activation_key"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- View fiscal.device form -->
+    <record id="view_fiscal_device_form" model="ir.ui.view">
+        <field name="name">view.fiscal.device.form</field>
+        <field name="model">fiscal.device</field>
+        <field name="arch" type="xml">
+            <form string="Fiscal Device">
+                <header>
+                    <button name="action_manual_token_refresh" 
+                            string="Refresh Token" 
+                            type="object" 
+                            class="btn-warning"/>
+                    <button name="action_check_status" 
+                            string="Check Status" 
+                            type="object" 
+                            class="btn-info"
+                            groups="fiscalisation.admin_fiscalisation"/>
+                    <button name="action_open_day" 
+                            string="Open Day" 
+                            type="object"
+                            class="btn-primary"
+                            attrs="{'invisible': [('is_day_open','=',True)]}"/>
+                    <button name="action_close_day" 
+                            string="Close Day" 
+                            type="object"
+                            class="btn-danger"
+                            attrs="{'invisible': [('is_day_open','=',False)]}"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Name..."/>
+                        </h1>
+                    </div>
+                    
+                    <notebook>
+                        <!-- Operations Tab -->
+                        <page string="Operations">
+                            <group>
+                                <group>
+                                    <field name="is_day_open" readonly="1"/>
+                                    <field name="fiscal_day_no" readonly="1"/>
+                                    <field name="last_operation" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Configuration Tab -->
+                        <page string="Configuration">
+                            <group>
+                                <group>
+                                    <field name="company_id" options="{'no_open': True}"/>
+                                    <field name="device_id" placeholder="Device ID..."/>
+                                    <field name="device_serial" placeholder="Device Serial..."/>
+                                    <field name="activation_key" placeholder="Activation Key..."/>
+                                    <field name="base_url" placeholder="API Base URL..."/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Authentication Tab -->
+                        <page string="Authentication">
+                            <group>
+                                <field name="access_token" readonly="1"/>
+                                <field name="refresh_token" readonly="1"/>
+                                <field name="token_expiry" readonly="1"/>
+                            </group>
+                        </page>
+
+                        <!-- Status Information Tab -->
+                        <page string="Status">
+                            <group>
+                                <field name="fiscal_day_status" readonly="1"/>
+                                <field name="last_receipt_global_no" readonly="1"/>
+                                <field name="last_receipt_no" readonly="1"/>
+                                <field name="fiscal_day_counters" readonly="1"/>
+                                <field name="last_status_check" readonly="1"/>
+                            </group>
+                        </page>
+
+                        <!-- Error Logs Tab -->
+                        <page string="Error Logs">
+                            <group>
+                                <field name="last_error_code" readonly="1"/>
+                                <field name="last_error_message" readonly="1"/>
+                                <field name="last_error_status" readonly="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- View fiscal.device search -->
+    <record id="view_fiscal_device_search" model="ir.ui.view">
+        <field name="name">view.fiscal.device.search</field>
+        <field name="model">fiscal.device</field>
+        <field name="arch" type="xml">
+            <search>
+                <group expand="1" string="Group By">
+                    <filter string="Name" name="name" domain="[]" context="{'group_by':'name'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action fiscal.device -->
+    <record id="action_fiscal_device" model="ir.actions.act_window">
+        <field name="name">Fiscal Device</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">fiscal.device</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                There is no examples click here to add new Fiscal Device.
+            </p>
+        </field>
+    </record>
+
+    <!-- Top menu item -->
+    <menuitem name="fiscalisation" 
+        id="fiscalisation.menu_root"
+        web_icon="fiscalisation,static/src/img/bill.png" 
+        groups="fiscalisation.admin_fiscalisation"
+    />
+    <!-- menu categories -->
+    <menuitem name="Devices" 
+            id="fiscalisation.menu_1" 
+            parent="fiscalisation.menu_root"
+            action="fiscalisation.action_fiscal_device"
+            />
+</odoo>

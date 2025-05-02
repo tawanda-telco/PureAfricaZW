@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_fiscal_device_user,fiscal.device.user,fiscalisation.model_fiscal_device,fiscalisation.user_fiscalisation,1,1,1,0
+access_fiscal_device_admin,fiscal.device.admin,fiscalisation.model_fiscal_device,fiscalisation.admin_fiscalisation,1,1,1,1
+access_res_company_fiscal,res.company.fiscal,fiscalisation.model_res_company,fiscalisation.admin_fiscalisation,1,1,0,0
+access_account_move_fiscal,account.move.fiscal,fiscalisation.model_account_move,fiscalisation.user_fiscalisation,1,0,0,0

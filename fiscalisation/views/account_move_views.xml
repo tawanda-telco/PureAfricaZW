@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="account_move_ref">
+            <field name="name">Account Move</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form" />
+            <field name="arch" type="xml">
+                <!-- Replace handle_fiscalize button with fiscalize button -->
+                <xpath expr="//header" position="inside">
+                    <button name="action_fiscalise_invoice"
+                        string="Fiscalise"
+                        class="btn btn-info mr-3"
+                        type="object"
+                        style="background:rgba(46, 210, 162,0.2);"
+                        attrs="{'invisible': ['|', ('fiscalised', '=', True), ('state', '!=', 'posted')]}"
+                        />
+                </xpath>
+
+                <!-- Add a new page in the notebook for Fiscal Information -->
+                <xpath expr="//notebook" position="inside">
+                    <page string="Fiscal Information" attrs="{'invisible': ['|', ('fiscalised', '=', False), ('device_id', '=', False)]}">
+                        <group>
+                            <field name="qr_url" readonly="1"/>
+                            <field name="fiscal_date" readonly="True"/>
+                            <field name="device_id" readonly="1"/>
+                            <field name="device_serial" readonly="1"/>
+                            <field name="receipt_global_number" readonly="1"/>
+                            <field name="receipt_number" readonly="1"/>
+                            <field name="fiscal_day_no" readonly="1"/>
+                            <field name="verification_code" readonly="1"/>
+                            <field name="customer_vat" readonly="1"/>
+                            <field name="customer_tin" readonly="1"/>
+                            <field name="fiscalised" invisible="1"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
