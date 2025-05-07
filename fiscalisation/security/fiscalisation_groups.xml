@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_category_fiscalisation" model="ir.module.category">
+        <field name="name">Fiscalisation</field>
+        <field name="description">Manage fiscalisation operations</field>
+        <field name="sequence">20</field>
+    </record>
+    
+    <record id="user_fiscalisation" model="res.groups">
+        <field name="name">Fiscalisation User</field>
+        <field name="category_id" ref="module_category_fiscalisation"/>
+        <field name="implied_ids" eval="[(4, ref('account.group_account_invoice'))]"/>
+    </record>
+
+    <record id="admin_fiscalisation" model="res.groups">
+        <field name="name">Fiscalisation Administrator</field>
+        <field name="category_id" ref="module_category_fiscalisation"/>
+        <field name="implied_ids" eval="[(4, ref('user_fiscalisation'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+</odoo>
